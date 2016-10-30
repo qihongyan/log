@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        ul,li,div,span{
+            margin:0px;
+            padding: 0px;
+        }
+        *{
+            margin:0px;
+            padding: 0px;
+        }
+        #box{
+
+            margin: 100px  200px;
+            width: 800px;
+            height: 500px;
+            /*overflow: hidden;*/
+            position: relative;
+
+
+        }
+        #box ul{
+            position: absolute;
+            width: 5600px;
+            height: 500px;
+
+        }
+        #ol{
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+
+        }
+        #ol span{
+            display: inline-block;
+            color: white;
+            padding: 5px;
+            margin-left: 10px;
+
+        }
+        #box ul li{
+            list-style: none;
+            float: left;
+        }
+        #arr{
+
+        }
+        #arr span{
+            display: inline-block;
+
+            width: 40px;
+            height: 30px;
+            background-color:black;
+            opacity: 0.7;
+            text-align: center;
+            line-height:30px ;
+            color: white;
+
+        }
+        #left{
+            position: absolute;
+            left: 0px;
+            top: 250px
+        }
+        #right{
+            position: absolute;
+            right: 0px;
+            top: 250px
+        }
+        .current{
+            background-color:yellow;
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+        <ul>
+            <li><img src="images/1.jpg" alt="" width="800px" height="500px"/></li>
+            <li><img src="images/2.jpg" alt=""  width="800px" height="500px"/></li>
+            <li><img src="images/3.jpg" alt=""  width="800px" height="500px"/></li>
+            <li><img src="images/4.jpg" alt=""  width="800px" height="500px"/></li>
+            <li><img src="images/5.jpg" alt=""  width="800px" height="500px"/></li>
+            <li><img src="images/6.jpg" alt=""  width="800px" height="500px"/></li>
+            <li><img src="images/1.jpg" alt=""  width="800px" height="500px"/></li>
+        </ul>
+        <ol id="ol">
+
+        </ol>
+        <div id="arr">
+            <span id="left"> < </span>
+            <span id="right"> ></span>
+        </div>
+        
+    </div>
+    <script src="../animate.js"></script>
+    <script>
+        var box=document.getElementById("box");
+        var arr=document.getElementById("arr");
+        var liList=document.getElementsByTagName("li")
+        var ol=document.getElementById("ol");
+        var olList=ol.children;
+        var imgWidth=box.offsetWidth;
+        var ul=box.children[0];
+        var left=document.getElementById("left");
+        var right=document.getElementById("right");
+
+
+        box.onmouseover=function(){
+            arr.style.display="block";
+            clearInterval(timer);
+        }
+        box.onmouseout=function(){
+            arr.style.display="none";
+            timer=setInterval(function(){
+                right.click();
+            },1000)
+
+        }
+//        动态生成squear 给第一个加颜色
+    for(var i=0;i<liList.length-1;i++){
+        var span=document.createElement("span");
+          ol.appendChild(span);
+          span.innerHTML=i+1;
+    }
+        olList[0].className="current"
+
+
+
+
+//        设置简单轮播
+        for(var i=0;i<olList.length;i++){
+                var span=olList[i];
+              span.index=i;
+            span.onmouseover=function(){
+                var idx=this.index;
+                var target=-idx*imgWidth;
+                animate(ul,{"left":target});
+                for(var j=0;j<olList.length;j++){
+                    olList[j].className="";
+                    pic=idx;
+                    squer=idx;
+                }
+                this.className="current"
+
+            }
+
+        }
+//        左右焦点轮播
+        var pic=0
+        var squer=0
+        right.onclick=function(){
+            if(pic==liList.length-1){
+                pic=0;
+                ul.style.left="0px";
+            }
+            pic++;
+            var target=-pic*imgWidth;
+            animate(ul,{"left":target})
+            if(squer==olList.length-1){
+                squer=0;
+            }else{
+                squer++;
+            }
+
+            for(var i=0;i<olList.length;i++){
+                olList[i].className="";
+            }
+             olList[squer].className="current";
+
+
+        }
+        left.onclick=function(){
+            if(pic==0){
+                pic=liList.length-1;
+                ul.style.left=-pic*imgWidth
+            }
+            pic--;
+            var target=-pic*imgWidth;
+            animate(ul,{"left":target})
+            if(squer==0){
+                squer=olList.length-1;
+            }else{
+                squer--;
+            }
+            for(var i=0;i<olList.length;i++){
+                olList[i].className="";
+            }
+            olList[squer].className="current";
+        }
+
+        var timer=setInterval(function(){
+            right.click();
+        },1000)
+    </script>
+</body>
+</html>
